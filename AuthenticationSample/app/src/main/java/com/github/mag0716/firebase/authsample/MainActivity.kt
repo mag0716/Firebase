@@ -8,12 +8,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = auth.currentUser
         updateUI(currentUser)
+        Log.d(TAG, "Play Serives = ${isPlayServicesAvailable()}")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -56,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                 firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
                 Log.w(TAG, "Google sign in failed", e)
+                updateUI(null)
             }
         }
     }
@@ -95,5 +100,11 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient.signOut().addOnCompleteListener(this) {
             updateUI(null)
         }
+    }
+
+    // for debug
+    private fun isPlayServicesAvailable(): Boolean {
+        val googleAPI = GoogleApiAvailability.getInstance()
+        return googleAPI.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
     }
 }
