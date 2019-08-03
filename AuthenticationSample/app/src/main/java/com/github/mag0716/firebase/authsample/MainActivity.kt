@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         signInButton.setOnClickListener { signIn() }
+        signOutButton.setOnClickListener { signOut() }
         auth = FirebaseAuth.getInstance()
     }
 
@@ -37,17 +38,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         Log.d(TAG, "updateUI : $user")
-        if (user != null) {
-            text.text = user.email
-            emailEditText.isVisible = false
-            passwordEditText.isVisible = false
-            signInButton.isVisible = false
-        } else {
-            emailEditText.isVisible = true
-            passwordEditText.isVisible = true
-            signInButton.isVisible = true
-        }
-
+        val isAuthenticated = user != null
+        text.text = user?.email
+        emailEditText.isVisible = isAuthenticated.not()
+        passwordEditText.isVisible = isAuthenticated.not()
+        signInButton.isVisible = isAuthenticated.not()
+        signOutButton.isVisible = isAuthenticated
     }
 
     private fun signIn() {
@@ -72,6 +68,11 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(container, "Invalid Email or Password.", Snackbar.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    private fun signOut() {
+        auth.signOut()
+        updateUI(null)
     }
 
     // for debug
