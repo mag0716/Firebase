@@ -35,6 +35,10 @@ https://firebase.google.com/docs/firestore/data-model
   * 特定のドキュメントに関連づけられたコレクション
   * 100 レベルまでネスト可能
 
+### 使用方法
+
+https://firebase.google.com/docs/firestore/quickstart
+
 ## Realtime Database
 
 リアルタイムのクライアント間同期が必要なモバイルアプリのためのデータベース。
