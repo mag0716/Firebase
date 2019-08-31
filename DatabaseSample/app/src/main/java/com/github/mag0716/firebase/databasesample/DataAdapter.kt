@@ -1,6 +1,5 @@
 package com.github.mag0716.firebase.databasesample
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
     override fun getItemCount(): Int = dataList.size
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        Log.d("xxx", "onBindViewHolder : $position")
         val data = dataList[position]
         holder.apply {
             titleText.text = data.title
