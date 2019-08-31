@@ -35,3 +35,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.0.0'
 }
+apply plugin: 'com.google.gms.google-services'
