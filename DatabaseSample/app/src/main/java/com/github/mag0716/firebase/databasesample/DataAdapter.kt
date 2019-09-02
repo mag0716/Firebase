@@ -24,6 +24,8 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
         }
     }
 
+    fun getData(index: Int) = dataList[index]
+
     fun addData(data: List<Data>) {
         val preSize = dataList.size
         dataList.addAll(data)
@@ -34,6 +36,11 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
         val preSize = dataList.size
         dataList.add(data)
         notifyItemRangeInserted(preSize, 1)
+    }
+
+    fun addData(index: Int, data: Data) {
+        dataList.add(index, data)
+        notifyItemRangeInserted(index, 1)
     }
 
     fun updateData(index: Int, data: Data) {

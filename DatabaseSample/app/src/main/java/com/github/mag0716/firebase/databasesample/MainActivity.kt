@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,6 +39,25 @@ class MainActivity : AppCompatActivity() {
             adapter = this@MainActivity.adapter
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                removeData(viewHolder.adapterPosition)
+            }
+        }
+        )
+        itemTouchHelper.attachToRecyclerView(list)
+
         addButton = findViewById(R.id.add_button)
         addButton.setOnClickListener { addData() }
 
@@ -83,5 +103,25 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             .addOnFailureListener { e -> Log.w(TAG, "addData failure", e) }
+    }
+
+    private fun removeData(index: Int) {
+        val data = adapter.getData(index)
+        Log.d(TAG, "removeData : $index : $data")
+        adapter.removeData(index)
+
+        database.collection(DB_NAME)
+            .document(data.id)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(
+                    TAG,
+                    "removeData success"
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "removeData failure", e)
+                adapter.addData(index, data)
+            }
     }
 }
