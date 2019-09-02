@@ -36,6 +36,16 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
         notifyItemRangeInserted(preSize, 1)
     }
 
+    fun updateData(index: Int, data: Data) {
+        dataList[index] = data
+        notifyItemChanged(index)
+    }
+
+    fun removeData(index: Int) {
+        dataList.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
     class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var titleText: TextView = itemView.findViewById(R.id.title_text)
     }

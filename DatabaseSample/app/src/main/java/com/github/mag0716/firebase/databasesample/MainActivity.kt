@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     val list = mutableListOf<Data>()
                     result.forEach {
                         Log.d(TAG, "$it")
-                        list.add(Data(it["datetime"] as Long, it["data"] as String))
+                        list.add(Data(it.id, it["datetime"] as Long, it["data"] as String))
                     }
                     adapter.addData(list)
                 }
@@ -61,17 +61,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addData() {
-        val data = hashMapOf(
-            "datetime" to System.currentTimeMillis(),
-            "data" to "data"
-        )
+        val datetime = System.currentTimeMillis()
+        val data = "data${adapter.itemCount}"
+        adapter.addData(Data(createdDatetime = datetime, title = data))
 
         database.collection(DB_NAME)
-            .add(data)
+            .add(
+                hashMapOf(
+                    "datetime" to datetime,
+                    "data" to data
+                )
+            )
             .addOnSuccessListener { documentReference ->
                 Log.d(
                     TAG,
                     "addData success: ${documentReference.id}"
+                )
+                adapter.updateData(
+                    adapter.itemCount - 1,
+                    Data(documentReference.id, datetime, data)
                 )
             }
             .addOnFailureListener { e -> Log.w(TAG, "addData failure", e) }
